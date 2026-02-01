@@ -8,48 +8,55 @@ export var OuraDashboard = function (_a) {
     var _g = useState(initialEndDate), endDate = _g[0], setEndDate = _g[1];
     var _h = useOuraData({ accessToken: accessToken, startDate: startDate, endDate: endDate, useSandbox: useSandbox, baseUrl: baseUrl }), data = _h.data, loading = _h.loading, error = _h.error;
     if (loading)
-        return _jsx("div", { style: { color: darkMode ? '#00ff9d' : '#000', fontFamily: darkMode ? '"Courier New", monospace' : 'sans-serif' }, children: "Loading Oura Data..." });
+        return _jsx("div", { children: "Loading Oura Data..." });
     if (error)
-        return _jsxs("div", { style: { color: 'red', fontFamily: darkMode ? '"Courier New", monospace' : 'sans-serif' }, children: ["Error: ", error] });
+        return _jsxs("div", { style: { color: 'red' }, children: ["Error: ", error] });
     if (!data)
-        return _jsx("div", { style: { color: darkMode ? '#a0a0a0' : '#000', fontFamily: darkMode ? '"Courier New", monospace' : 'sans-serif' }, children: "No data available" });
-    return (_jsxs("div", { style: {
-            padding: '20px',
-            fontFamily: darkMode ? '"Courier New", Courier, monospace' : 'sans-serif',
-            backgroundColor: darkMode ? '#050505' : 'transparent',
-            borderRadius: '8px',
-            border: darkMode ? '1px solid #333' : 'none'
-        }, children: [_jsx("h2", { style: { color: darkMode ? '#00f3ff' : 'inherit', textTransform: darkMode ? 'uppercase' : 'none', letterSpacing: darkMode ? '2px' : 'normal' }, children: "Oura Ring Stats Dashboard" }), _jsxs("div", { style: { marginBottom: '20px', display: 'flex', gap: '10px', alignItems: 'center' }, children: [_jsxs("label", { style: { color: darkMode ? '#a0a0a0' : 'inherit' }, children: ["Start Date:", _jsx("input", { type: "date", value: startDate, onChange: function (e) { return setStartDate(e.target.value); }, style: {
-                                    marginLeft: '5px',
-                                    backgroundColor: darkMode ? '#111' : '#fff',
-                                    color: darkMode ? '#00ff9d' : '#000',
-                                    border: darkMode ? '1px solid #333' : '1px solid #ccc',
-                                    padding: '4px',
-                                    borderRadius: '4px'
-                                } })] }), _jsxs("label", { style: { color: darkMode ? '#a0a0a0' : 'inherit' }, children: ["End Date:", _jsx("input", { type: "date", value: endDate, onChange: function (e) { return setEndDate(e.target.value); }, style: {
-                                    marginLeft: '5px',
-                                    backgroundColor: darkMode ? '#111' : '#fff',
-                                    color: darkMode ? '#00ff9d' : '#000',
-                                    border: darkMode ? '1px solid #333' : '1px solid #ccc',
-                                    padding: '4px',
-                                    borderRadius: '4px'
-                                } })] })] }), _jsxs("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }, children: [_jsx("div", { style: {
-                            border: darkMode ? '1px solid #333' : '1px solid #ddd',
-                            padding: '15px',
-                            borderRadius: '8px',
-                            boxShadow: darkMode ? '0 0 10px rgba(0,243,255,0.1)' : '0 2px 4px rgba(0,0,0,0.1)',
-                            backgroundColor: darkMode ? '#080808' : '#fff'
-                        }, children: _jsx(ActivityChart, { data: data.activity, darkMode: darkMode }) }), _jsx("div", { style: {
-                            border: darkMode ? '1px solid #333' : '1px solid #ddd',
-                            padding: '15px',
-                            borderRadius: '8px',
-                            boxShadow: darkMode ? '0 0 10px rgba(255,115,0,0.1)' : '0 2px 4px rgba(0,0,0,0.1)',
-                            backgroundColor: darkMode ? '#080808' : '#fff'
-                        }, children: _jsx(ReadinessChart, { data: data.readiness, darkMode: darkMode }) }), _jsx("div", { style: {
-                            border: darkMode ? '1px solid #333' : '1px solid #ddd',
-                            padding: '15px',
-                            borderRadius: '8px',
-                            boxShadow: darkMode ? '0 0 10px rgba(0,255,157,0.1)' : '0 2px 4px rgba(0,0,0,0.1)',
-                            backgroundColor: darkMode ? '#080808' : '#fff'
-                        }, children: _jsx(SleepChart, { data: data.sleep, darkMode: darkMode }) })] })] }));
+        return _jsx("div", { children: "No data available" });
+    var containerStyle = darkMode ? {
+        backgroundColor: '#000000',
+        color: '#ffffff',
+        fontFamily: '"Courier New", Courier, monospace', // Tech/Mono look
+        padding: '20px',
+        minHeight: '100vh', // Ensure full height
+        boxSizing: 'border-box'
+    } : {
+        padding: '20px',
+        fontFamily: 'sans-serif'
+    };
+    var headerStyle = darkMode ? {
+        textTransform: 'uppercase',
+        letterSpacing: '4px',
+        color: '#ffffff',
+        borderBottom: '1px solid #ffffff',
+        paddingBottom: '16px',
+        marginBottom: '32px',
+        fontSize: '24px',
+        fontWeight: 'normal'
+    } : {};
+    var inputStyle = darkMode ? {
+        backgroundColor: '#000000',
+        color: '#ffffff',
+        border: '1px solid #333333',
+        padding: '8px 12px',
+        fontFamily: 'inherit',
+        marginLeft: '10px',
+        outline: 'none',
+        boxShadow: 'none',
+        borderRadius: '0'
+    } : {
+        marginLeft: '5px'
+    };
+    var cardStyle = darkMode ? {
+        backgroundColor: '#000000',
+        border: '1px solid #333333',
+        padding: '24px',
+        borderRadius: '0' // Sharp edges for monochrome/tech look
+    } : {
+        border: '1px solid #ddd',
+        padding: '15px',
+        borderRadius: '8px',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+    };
+    return (_jsxs("div", { style: containerStyle, children: [_jsx("h2", { style: headerStyle, children: "Oura Ring Stats Dashboard" }), _jsxs("div", { style: { marginBottom: '32px', display: 'flex', gap: '32px', alignItems: 'center' }, children: [_jsxs("label", { style: { textTransform: 'uppercase', letterSpacing: '1px', fontSize: '12px', color: darkMode ? '#888' : 'inherit' }, children: ["START DATE:", _jsx("input", { type: "date", value: startDate, onChange: function (e) { return setStartDate(e.target.value); }, style: inputStyle })] }), _jsxs("label", { style: { textTransform: 'uppercase', letterSpacing: '1px', fontSize: '12px', color: darkMode ? '#888' : 'inherit' }, children: ["END DATE:", _jsx("input", { type: "date", value: endDate, onChange: function (e) { return setEndDate(e.target.value); }, style: inputStyle })] })] }), _jsxs("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '24px' }, children: [_jsx("div", { style: cardStyle, children: _jsx(ActivityChart, { data: data.activity, darkMode: darkMode }) }), _jsx("div", { style: cardStyle, children: _jsx(ReadinessChart, { data: data.readiness, darkMode: darkMode }) }), _jsx("div", { style: cardStyle, children: _jsx(SleepChart, { data: data.sleep, darkMode: darkMode }) })] })] }));
 };

@@ -58,8 +58,8 @@ function App() {
           onClick={() => setIsDarkMode(!isDarkMode)}
           style={{
             backgroundColor: isDarkMode ? '#000' : '#f0f0f0',
-            color: isDarkMode ? '#00ff9d' : '#333',
-            border: isDarkMode ? '1px solid #00ff9d' : '1px solid #ccc',
+            color: isDarkMode ? '#ffffff' : '#333',
+            border: isDarkMode ? '1px solid #ffffff' : '1px solid #ccc',
             padding: '8px 16px',
             fontFamily: isDarkMode ? '"Courier New", Courier, monospace' : 'inherit',
             textTransform: isDarkMode ? 'uppercase' : 'none'
