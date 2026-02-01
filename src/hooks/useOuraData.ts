@@ -6,9 +6,10 @@ interface UseOuraDataProps {
   accessToken: string;
   startDate: string;
   endDate: string;
+  useSandbox?: boolean;
 }
 
-export const useOuraData = ({ accessToken, startDate, endDate }: UseOuraDataProps) => {
+export const useOuraData = ({ accessToken, startDate, endDate, useSandbox = true }: UseOuraDataProps) => {
   const [data, setData] = useState<OuraData | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -21,11 +22,15 @@ export const useOuraData = ({ accessToken, startDate, endDate }: UseOuraDataProp
       try {
         const headers = { Authorization: `Bearer ${accessToken}` };
         const params = { start_date: startDate, end_date: endDate };
+        
+        const baseUrl = useSandbox 
+          ? 'https://api.ouraring.com/v2/sandbox/usercollection' 
+          : 'https://api.ouraring.com/v2/usercollection';
 
         const [activityRes, readinessRes, sleepRes] = await Promise.all([
-          axios.get<{ data: DailyActivity[] }>('https://api.ouraring.com/v2/usercollection/daily_activity', { headers, params }),
-          axios.get<{ data: DailyReadiness[] }>('https://api.ouraring.com/v2/usercollection/daily_readiness', { headers, params }),
-          axios.get<{ data: DailySleep[] }>('https://api.ouraring.com/v2/usercollection/daily_sleep', { headers, params })
+          axios.get<{ data: DailyActivity[] }>(`${baseUrl}/daily_activity`, { headers, params }),
+          axios.get<{ data: DailyReadiness[] }>(`${baseUrl}/daily_readiness`, { headers, params }),
+          axios.get<{ data: DailySleep[] }>(`${baseUrl}/daily_sleep`, { headers, params })
         ]);
 
         setData({
@@ -42,7 +47,7 @@ export const useOuraData = ({ accessToken, startDate, endDate }: UseOuraDataProp
     };
 
     fetchData();
-  }, [accessToken, startDate, endDate]);
+  }, [accessToken, startDate, endDate, useSandbox]);
 
   return { data, loading, error };
 };

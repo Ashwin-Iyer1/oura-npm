@@ -37,13 +37,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 export var useOuraData = function (_a) {
-    var accessToken = _a.accessToken, startDate = _a.startDate, endDate = _a.endDate;
-    var _b = useState(null), data = _b[0], setData = _b[1];
-    var _c = useState(false), loading = _c[0], setLoading = _c[1];
-    var _d = useState(null), error = _d[0], setError = _d[1];
+    var accessToken = _a.accessToken, startDate = _a.startDate, endDate = _a.endDate, _b = _a.useSandbox, useSandbox = _b === void 0 ? true : _b;
+    var _c = useState(null), data = _c[0], setData = _c[1];
+    var _d = useState(false), loading = _d[0], setLoading = _d[1];
+    var _e = useState(null), error = _e[0], setError = _e[1];
     useEffect(function () {
         var fetchData = function () { return __awaiter(void 0, void 0, void 0, function () {
-            var headers, params, _a, activityRes, readinessRes, sleepRes, err_1;
+            var headers, params, baseUrl, _a, activityRes, readinessRes, sleepRes, err_1;
             var _b;
             return __generator(this, function (_c) {
                 switch (_c.label) {
@@ -57,10 +57,13 @@ export var useOuraData = function (_a) {
                         _c.trys.push([1, 3, 4, 5]);
                         headers = { Authorization: "Bearer ".concat(accessToken) };
                         params = { start_date: startDate, end_date: endDate };
+                        baseUrl = useSandbox
+                            ? 'https://api.ouraring.com/v2/sandbox/usercollection'
+                            : 'https://api.ouraring.com/v2/usercollection';
                         return [4 /*yield*/, Promise.all([
-                                axios.get('https://api.ouraring.com/v2/usercollection/daily_activity', { headers: headers, params: params }),
-                                axios.get('https://api.ouraring.com/v2/usercollection/daily_readiness', { headers: headers, params: params }),
-                                axios.get('https://api.ouraring.com/v2/usercollection/daily_sleep', { headers: headers, params: params })
+                                axios.get("".concat(baseUrl, "/daily_activity"), { headers: headers, params: params }),
+                                axios.get("".concat(baseUrl, "/daily_readiness"), { headers: headers, params: params }),
+                                axios.get("".concat(baseUrl, "/daily_sleep"), { headers: headers, params: params })
                             ])];
                     case 2:
                         _a = _c.sent(), activityRes = _a[0], readinessRes = _a[1], sleepRes = _a[2];
@@ -83,6 +86,6 @@ export var useOuraData = function (_a) {
             });
         }); };
         fetchData();
-    }, [accessToken, startDate, endDate]);
+    }, [accessToken, startDate, endDate, useSandbox]);
     return { data: data, loading: loading, error: error };
 };
