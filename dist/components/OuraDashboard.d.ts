@@ -5,6 +5,7 @@ interface OuraDashboardProps {
     endDate?: string;
     useSandbox?: boolean;
     baseUrl?: string;
+    darkMode?: boolean;
 }
 export declare const OuraDashboard: React.FC<OuraDashboardProps>;
 export {};
