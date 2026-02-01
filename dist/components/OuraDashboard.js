@@ -3,10 +3,10 @@ import { useState } from 'react';
 import { useOuraData } from '../hooks/useOuraData';
 import { ActivityChart, ReadinessChart, SleepChart } from './Charts';
 export var OuraDashboard = function (_a) {
-    var accessToken = _a.accessToken, _b = _a.startDate, initialStartDate = _b === void 0 ? new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : _b, _c = _a.endDate, initialEndDate = _c === void 0 ? new Date().toISOString().split('T')[0] : _c, _d = _a.useSandbox, useSandbox = _d === void 0 ? true : _d;
+    var accessToken = _a.accessToken, _b = _a.startDate, initialStartDate = _b === void 0 ? new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : _b, _c = _a.endDate, initialEndDate = _c === void 0 ? new Date().toISOString().split('T')[0] : _c, _d = _a.useSandbox, useSandbox = _d === void 0 ? true : _d, baseUrl = _a.baseUrl;
     var _e = useState(initialStartDate), startDate = _e[0], setStartDate = _e[1];
     var _f = useState(initialEndDate), endDate = _f[0], setEndDate = _f[1];
-    var _g = useOuraData({ accessToken: accessToken, startDate: startDate, endDate: endDate, useSandbox: useSandbox }), data = _g.data, loading = _g.loading, error = _g.error;
+    var _g = useOuraData({ accessToken: accessToken, startDate: startDate, endDate: endDate, useSandbox: useSandbox, baseUrl: baseUrl }), data = _g.data, loading = _g.loading, error = _g.error;
     if (loading)
         return _jsx("div", { children: "Loading Oura Data..." });
     if (error)

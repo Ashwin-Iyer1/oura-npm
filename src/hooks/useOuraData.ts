@@ -7,9 +7,10 @@ interface UseOuraDataProps {
   startDate: string;
   endDate: string;
   useSandbox?: boolean;
+  baseUrl?: string;
 }
 
-export const useOuraData = ({ accessToken, startDate, endDate, useSandbox = true }: UseOuraDataProps) => {
+export const useOuraData = ({ accessToken, startDate, endDate, useSandbox = true, baseUrl }: UseOuraDataProps) => {
   const [data, setData] = useState<OuraData | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,14 +24,14 @@ export const useOuraData = ({ accessToken, startDate, endDate, useSandbox = true
         const headers = { Authorization: `Bearer ${accessToken}` };
         const params = { start_date: startDate, end_date: endDate };
         
-        const baseUrl = useSandbox 
+        const finalBaseUrl = baseUrl || (useSandbox 
           ? 'https://api.ouraring.com/v2/sandbox/usercollection' 
-          : 'https://api.ouraring.com/v2/usercollection';
+          : 'https://api.ouraring.com/v2/usercollection');
 
         const [activityRes, readinessRes, sleepRes] = await Promise.all([
-          axios.get<{ data: DailyActivity[] }>(`${baseUrl}/daily_activity`, { headers, params }),
-          axios.get<{ data: DailyReadiness[] }>(`${baseUrl}/daily_readiness`, { headers, params }),
-          axios.get<{ data: DailySleep[] }>(`${baseUrl}/daily_sleep`, { headers, params })
+          axios.get<{ data: DailyActivity[] }>(`${finalBaseUrl}/daily_activity`, { headers, params }),
+          axios.get<{ data: DailyReadiness[] }>(`${finalBaseUrl}/daily_readiness`, { headers, params }),
+          axios.get<{ data: DailySleep[] }>(`${finalBaseUrl}/daily_sleep`, { headers, params })
         ]);
 
         setData({
@@ -47,7 +48,7 @@ export const useOuraData = ({ accessToken, startDate, endDate, useSandbox = true
     };
 
     fetchData();
-  }, [accessToken, startDate, endDate, useSandbox]);
+  }, [accessToken, startDate, endDate, useSandbox, baseUrl]);
 
   return { data, loading, error };
 };

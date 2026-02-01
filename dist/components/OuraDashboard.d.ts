@@ -4,6 +4,7 @@ interface OuraDashboardProps {
     startDate?: string;
     endDate?: string;
     useSandbox?: boolean;
+    baseUrl?: string;
 }
 export declare const OuraDashboard: React.FC<OuraDashboardProps>;
 export {};

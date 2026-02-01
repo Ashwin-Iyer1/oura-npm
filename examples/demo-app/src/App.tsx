@@ -13,6 +13,9 @@ function App() {
     ? 'sandbox-dummy-token' 
     : (authResult?.accessToken || manualToken || localStorage.getItem('oura_access_token') || '')
 
+  // We must use a proxy to avoid CORS when fetching from localhost
+  const proxyBaseUrl = '/oura-api/v2/sandbox/usercollection'
+
   useEffect(() => {
     if (authResult?.accessToken) {
       localStorage.setItem('oura_access_token', authResult.accessToken)
@@ -98,7 +101,11 @@ function App() {
               Logout / Change Token
             </button>
           </div>
-          <OuraDashboard accessToken={activeToken} useSandbox={useSandbox} />
+          <OuraDashboard 
+            accessToken={activeToken} 
+            useSandbox={useSandbox} 
+            baseUrl={useSandbox ? proxyBaseUrl : undefined}
+          />
         </div>
       )}
     </div>

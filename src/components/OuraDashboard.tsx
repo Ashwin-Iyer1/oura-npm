@@ -7,18 +7,20 @@ interface OuraDashboardProps {
   startDate?: string;
   endDate?: string;
   useSandbox?: boolean;
+  baseUrl?: string;
 }
 
 export const OuraDashboard: React.FC<OuraDashboardProps> = ({ 
   accessToken, 
   startDate: initialStartDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], 
   endDate: initialEndDate = new Date().toISOString().split('T')[0],
-  useSandbox = true
+  useSandbox = true,
+  baseUrl
 }) => {
   const [startDate, setStartDate] = useState(initialStartDate);
   const [endDate, setEndDate] = useState(initialEndDate);
   
-  const { data, loading, error } = useOuraData({ accessToken, startDate, endDate, useSandbox });
+  const { data, loading, error } = useOuraData({ accessToken, startDate, endDate, useSandbox, baseUrl });
 
   if (loading) return <div>Loading Oura Data...</div>;
   if (error) return <div style={{ color: 'red' }}>Error: {error}</div>;
