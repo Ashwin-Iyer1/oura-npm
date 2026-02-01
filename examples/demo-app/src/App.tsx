@@ -1,0 +1,90 @@
+import { useState, useEffect } from 'react'
+import { OuraDashboard, ConnectOuraButton, useOuraAuth } from 'oura-stats-visualizer'
+import './App.css'
+
+function App() {
+  const [manualToken, setManualToken] = useState('')
+  const [clientId, setClientId] = useState('')
+  const authResult = useOuraAuth()
+
+  // Prioritize OAuth token, fall back to manual entry or localStorage
+  const activeToken = authResult?.accessToken || manualToken || localStorage.getItem('oura_access_token') || ''
+
+  useEffect(() => {
+    if (authResult?.accessToken) {
+      localStorage.setItem('oura_access_token', authResult.accessToken)
+    }
+  }, [authResult])
+
+  const handleManualTokenChange = (t: string) => {
+    setManualToken(t)
+    if (t) localStorage.setItem('oura_access_token', t)
+  }
+
+  const handleLogout = () => {
+    setManualToken('')
+    localStorage.removeItem('oura_access_token')
+    // Note: This won't clear authResult until page reload/hash clear, but sufficient for demo
+    window.location.hash = '' 
+    window.location.reload()
+  }
+
+  return (
+    <div style={{ padding: 20 }}>
+      <h1>Oura Stats Visualizer Demo</h1>
+      {!activeToken ? (
+        <div style={{display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 400}}>
+          
+          <div style={{border: '1px solid #ccc', padding: 20, borderRadius: 8}}>
+            <h3>Method 1: Connect with OAuth</h3>
+            <div style={{display: 'flex', flexDirection: 'column', gap: 10}}>
+              <label>
+                Client ID (from Oura Cloud):
+                <input 
+                  type="text" 
+                  value={clientId}
+                  onChange={e => setClientId(e.target.value)}
+                  placeholder="e.g. XXXXXXXXXXXXX"
+                  style={{width: '100%', padding: 5, marginTop: 5}}
+                />
+              </label>
+              <p style={{fontSize: 12, color: '#666'}}>
+                Ensure <code>{window.location.origin}</code> is a Redirect URI in your Oura App.
+              </p>
+              <ConnectOuraButton 
+                clientId={clientId}
+                redirectUri={window.location.origin}
+                state="demo-app-state"
+              />
+            </div>
+          </div>
+
+          <div style={{border: '1px solid #ccc', padding: 20, borderRadius: 8}}>
+            <h3>Method 2: Paste Token</h3>
+            <p>Enter your Personal Access Token directly.</p>
+            <input 
+              type="text" 
+              placeholder="Paste Token Here" 
+              value={manualToken} 
+              onChange={e => handleManualTokenChange(e.target.value)}
+              style={{padding: 8, fontSize: 16, width: '100%'}}
+            />
+          </div>
+
+        </div>
+      ) : (
+        <div>
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20}}>
+            <span>Connected!</span>
+            <button onClick={handleLogout} style={{padding: '5px 10px'}}>
+              Logout / Change Token
+            </button>
+          </div>
+          <OuraDashboard accessToken={activeToken} />
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default App
