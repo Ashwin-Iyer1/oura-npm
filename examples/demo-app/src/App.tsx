@@ -6,6 +6,7 @@ function App() {
   const [manualToken, setManualToken] = useState('')
   const [clientId, setClientId] = useState('')
   const [useSandbox, setUseSandbox] = useState(true)
+  const [isDarkMode, setIsDarkMode] = useState(false)
   const authResult = useOuraAuth()
 
   // Prioritize OAuth token, fall back to manual entry or localStorage, or use dummy for sandbox
@@ -36,8 +37,37 @@ function App() {
   }
 
   return (
-    <div style={{ padding: 20 }}>
-      <h1>Oura Stats Visualizer Demo</h1>
+    <div style={{ 
+      padding: 20, 
+      minHeight: '100vh', 
+      backgroundColor: isDarkMode ? '#050505' : '#fff',
+      color: isDarkMode ? '#a0a0a0' : 'inherit',
+      fontFamily: isDarkMode ? '"Courier New", Courier, monospace' : 'sans-serif',
+      transition: 'all 0.3s ease'
+    }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h1 style={{ 
+          fontSize: isDarkMode ? '2rem' : '3.2em',
+          textTransform: isDarkMode ? 'uppercase' : 'none',
+          letterSpacing: isDarkMode ? '4px' : 'normal',
+          color: isDarkMode ? '#fff' : 'inherit'
+        }}>
+          {isDarkMode ? 'Agent Data Overview' : 'Oura Stats Visualizer Demo'}
+        </h1>
+        <button 
+          onClick={() => setIsDarkMode(!isDarkMode)}
+          style={{
+            backgroundColor: isDarkMode ? '#000' : '#f0f0f0',
+            color: isDarkMode ? '#00ff9d' : '#333',
+            border: isDarkMode ? '1px solid #00ff9d' : '1px solid #ccc',
+            padding: '8px 16px',
+            fontFamily: isDarkMode ? '"Courier New", Courier, monospace' : 'inherit',
+            textTransform: isDarkMode ? 'uppercase' : 'none'
+          }}
+        >
+          {isDarkMode ? '[ Disable Dark Mode ]' : 'Enable Dark Mode'}
+        </button>
+      </div>
       
       <div style={{ marginBottom: 20 }}>
         <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
@@ -105,6 +135,7 @@ function App() {
             accessToken={activeToken} 
             useSandbox={useSandbox} 
             baseUrl={useSandbox ? proxyBaseUrl : undefined}
+            darkMode={isDarkMode}
           />
         </div>
       )}
