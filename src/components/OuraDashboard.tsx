@@ -72,7 +72,7 @@ export const OuraDashboard: React.FC<OuraDashboardProps> = ({
     border: borderStyle,
     padding: '2px', // Minimal padding
     gridColumn: `span ${span}`,
-    minHeight: '200px',
+    height: '250px', // Fixed height to prevent infinite growth with ParentSize
     display: 'flex',
     flexDirection: 'column' as const,
     overflow: 'hidden'
@@ -81,7 +81,11 @@ export const OuraDashboard: React.FC<OuraDashboardProps> = ({
     padding: '15px', 
     borderRadius: '8px', 
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    gridColumn: `span ${span}`
+    gridColumn: `span ${span}`,
+    height: '300px',
+    display: 'flex',
+    flexDirection: 'column' as const,
+    overflow: 'hidden'
   });
 
   const headerTextStyle = darkMode ? {
