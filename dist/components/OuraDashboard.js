@@ -38,9 +38,12 @@ export var OuraDashboard = function (_a) {
         backgroundColor: '#050505'
     } : {
         display: 'flex',
-        gap: '20px',
+        gap: '16px',
         alignItems: 'center',
-        marginBottom: '20px'
+        border: borderStyle,
+        padding: '8px 12px',
+        backgroundColor: '#ffffff',
+        color: '#333'
     };
     var gridContainerStyle = {
         display: 'grid',
@@ -60,7 +63,7 @@ export var OuraDashboard = function (_a) {
             flexDirection: 'column',
             overflow: 'hidden'
         } : {
-            border: '1px solid #ddd',
+            border: borderStyle,
             padding: '15px',
             borderRadius: '8px',
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
@@ -68,7 +71,9 @@ export var OuraDashboard = function (_a) {
             height: '300px',
             display: 'flex',
             flexDirection: 'column',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            backgroundColor: '#fff',
+            color: '#333'
         });
     };
     var headerTextStyle = darkMode ? {
@@ -77,7 +82,14 @@ export var OuraDashboard = function (_a) {
         fontSize: '14px',
         margin: 0,
         color: '#fff'
-    } : {};
+    } : {
+        textTransform: 'uppercase',
+        letterSpacing: '2px',
+        fontSize: '14px',
+        margin: 0,
+        color: '#333',
+        fontWeight: 'bold'
+    };
     var inputStyle = darkMode ? {
         backgroundColor: '#000',
         color: '#fff',
@@ -89,7 +101,15 @@ export var OuraDashboard = function (_a) {
         fontSize: '11px',
         borderRadius: 0
     } : {
-        marginLeft: '5px'
+        backgroundColor: '#fff',
+        color: '#333',
+        border: '1px solid #ccc',
+        padding: '2px 6px',
+        fontFamily: 'inherit',
+        marginLeft: '8px',
+        outline: 'none',
+        fontSize: '11px',
+        borderRadius: 0
     };
     return (_jsxs("div", { style: containerStyle, children: [_jsxs("div", { style: controlBarStyle, children: [_jsx("h2", { style: headerTextStyle, children: "OURA_STATS_VISUALIZER" }), _jsx("div", { style: { flex: 1 } }), _jsxs("div", { style: { display: 'flex', gap: '16px' }, children: [_jsxs("label", { style: { textTransform: 'uppercase', letterSpacing: '1px', fontSize: '10px', color: '#888' }, children: ["START_DATE", _jsx("input", { type: "date", value: startDate, onChange: function (e) { return setStartDate(e.target.value); }, style: inputStyle })] }), _jsxs("label", { style: { textTransform: 'uppercase', letterSpacing: '1px', fontSize: '10px', color: '#888' }, children: ["END_DATE", _jsx("input", { type: "date", value: endDate, onChange: function (e) { return setEndDate(e.target.value); }, style: inputStyle })] })] })] }), _jsxs("div", { style: gridContainerStyle, children: [_jsx("div", { style: cardStyle(4), children: _jsx(ActivityChart, { data: data.activity, darkMode: darkMode }) }), _jsx("div", { style: cardStyle(4), children: _jsx(ReadinessChart, { data: data.readiness, darkMode: darkMode }) }), _jsx("div", { style: cardStyle(4), children: _jsx(SleepChart, { data: data.sleep, darkMode: darkMode }) }), data.daily_stress && data.daily_stress.length > 0 && (_jsx("div", { style: cardStyle(4), children: _jsx(StressChart, { data: data.daily_stress, darkMode: darkMode }) })), data.daily_spo2 && data.daily_spo2.length > 0 && (_jsx("div", { style: cardStyle(4), children: _jsx(SpO2Chart, { data: data.daily_spo2, darkMode: darkMode }) })), data.heart_rate && data.heart_rate.length > 0 && (_jsx("div", { style: cardStyle(4), children: _jsx(HeartRateChart, { data: data.heart_rate, darkMode: darkMode }) })), data.workout && data.workout.length > 0 && (_jsx("div", { style: cardStyle(4), children: _jsx(WorkoutChart, { data: data.workout, darkMode: darkMode }) })), data.daily_resilience && data.daily_resilience.length > 0 && (_jsx("div", { style: cardStyle(4), children: _jsx(ResilienceChart, { data: data.daily_resilience, darkMode: darkMode }) })), data.daily_cardiovascular_age && data.daily_cardiovascular_age.length > 0 && (_jsx("div", { style: cardStyle(4), children: _jsx(CardioAgeChart, { data: data.daily_cardiovascular_age, darkMode: darkMode }) })), data.vo2_max && data.vo2_max.length > 0 && (_jsx("div", { style: cardStyle(4), children: _jsx(VO2MaxChart, { data: data.vo2_max, darkMode: darkMode }) })), data.sleep_documents && data.sleep_documents.length > 0 && (_jsx("div", { style: cardStyle(4), children: _jsx(SleepDetailChart, { data: data.sleep_documents, darkMode: darkMode }) })), (data.sleep_time && data.sleep_time.length > 0) && (_jsx("div", { style: cardStyle(4), children: _jsx(SleepTimeCard, { data: data.sleep_time, darkMode: darkMode }) })), (data.ring_configuration && data.ring_configuration.length > 0) && (_jsx("div", { style: cardStyle(4), children: _jsx(RingConfigCard, { data: data.ring_configuration, darkMode: darkMode }) })), _jsx("div", { style: cardStyle(4), children: _jsx(RestModeCard, { data: data.rest_mode_period || [], darkMode: darkMode }) }), _jsx("div", { style: cardStyle(4), children: _jsx(SimpleListCard, { title: "SESSIONS", darkMode: darkMode, data: data.session || [], renderItem: function (s) { return (_jsxs("div", { children: [_jsx("span", { style: { opacity: 0.7, marginRight: 6 }, children: s.day }), _jsx("strong", { children: s.type }), " (", s.mood, ")"] })); } }) }), _jsx("div", { style: cardStyle(4), children: _jsx(SimpleListCard, { title: "TAGS", darkMode: darkMode, data: data.tag || [], renderItem: function (t) {
                                 var _a;

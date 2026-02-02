@@ -60,9 +60,12 @@ export const OuraDashboard: React.FC<OuraDashboardProps> = ({
     backgroundColor: '#050505'
   } : {
     display: 'flex', 
-    gap: '20px', 
+    gap: '16px', 
     alignItems: 'center', 
-    marginBottom: '20px'
+    border: borderStyle,
+    padding: '8px 12px',
+    backgroundColor: '#ffffff',
+    color: '#333'
   };
 
   const gridContainerStyle = {
@@ -82,7 +85,7 @@ export const OuraDashboard: React.FC<OuraDashboardProps> = ({
     flexDirection: 'column' as const,
     overflow: 'hidden'
   } : {
-    border: '1px solid #ddd', 
+    border: borderStyle, 
     padding: '15px', 
     borderRadius: '8px', 
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
@@ -90,7 +93,9 @@ export const OuraDashboard: React.FC<OuraDashboardProps> = ({
     height: '300px',
     display: 'flex',
     flexDirection: 'column' as const,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    backgroundColor: '#fff',
+    color: '#333'
   });
 
   const headerTextStyle = darkMode ? {
@@ -99,7 +104,14 @@ export const OuraDashboard: React.FC<OuraDashboardProps> = ({
     fontSize: '14px',
     margin: 0,
     color: '#fff'
-  } : {};
+  } : {
+    textTransform: 'uppercase' as const,
+    letterSpacing: '2px',
+    fontSize: '14px',
+    margin: 0,
+    color: '#333',
+    fontWeight: 'bold'
+  };
 
   const inputStyle = darkMode ? {
     backgroundColor: '#000',
@@ -112,7 +124,15 @@ export const OuraDashboard: React.FC<OuraDashboardProps> = ({
     fontSize: '11px',
     borderRadius: 0
   } : {
-    marginLeft: '5px'
+    backgroundColor: '#fff',
+    color: '#333',
+    border: '1px solid #ccc',
+    padding: '2px 6px',
+    fontFamily: 'inherit',
+    marginLeft: '8px',
+    outline: 'none',
+    fontSize: '11px',
+    borderRadius: 0
   };
 
   return (
