@@ -2,8 +2,12 @@
 
 A plug-and-play React library for visualizing data from the Oura Ring V2 API.
 
-![Charts Preview](https://via.placeholder.com/800x400?text=Oura+Stats+Visualizer+Demo)
+<div style="display: flex; gap: 16px; align-items: center;">
 
+<img src="https://raw.githubusercontent.com/Ashwin-Iyer1/oura-npm/refs/heads/main/lightmode.png" height="400" alt="Dark Mode Preview" />
+
+<img src="https://raw.githubusercontent.com/Ashwin-Iyer1/oura-npm/refs/heads/main/darkmode.png" height="400" alt="Dark Mode Preview" />
+</div>
 ## Features is includes
 
 - **Ready-to-use Dashboard**: A complete `OuraDashboard` component that fetches and visualizes data.
