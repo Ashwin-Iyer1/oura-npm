@@ -1,0 +1,150 @@
+.wrapped-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  color: #fff;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', sans-serif; /* Use a nice font if avail, fallback handy */
+}
+
+.wrapped-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.slide {
+  text-align: center;
+  padding: 20px;
+  animation: fadeIn 0.5s ease-out;
+  width: 100%;
+  max-width: 500px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.slide h1 { 
+  font-size: 3rem; 
+  margin-bottom: 20px; 
+  background: linear-gradient(45deg, #ff00cc, #3333ff); 
+  -webkit-background-clip: text; 
+  background-clip: text; /* Standard property */
+  -webkit-text-fill-color: transparent; 
+}
+.slide h2 { font-size: 2.5rem; margin-bottom: 10px; }
+.stat-big { font-size: 4rem; font-weight: 800; margin: 20px 0; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+
+.insight-card {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 30px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.wrapped-progress {
+  display: flex;
+  gap: 5px;
+  padding: 10px 20px;
+  height: 20px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  transition: background 0.3s;
+}
+
+.progress-bar.active { background: #fff; box-shadow: 0 0 5px #fff; }
+.progress-bar.completed { background: #fff; }
+
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 30px;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+/* Specific Slide Styles */
+.intro-slide { background: radial-gradient(circle, #222 0%, #000 100%); }
+.sleep-slide { background: radial-gradient(circle at center, #1a237e 0%, #000 70%); }
+.activity-slide { background: radial-gradient(circle at center, #ff6f00 0%, #000 70%); }
+.readiness-slide { background: radial-gradient(circle at center, #00c853 0%, #000 70%); }
+.persona-slide { background: conic-gradient(from 180deg at 50% 50%, #2a2a2a 0deg, #111 180deg, #2a2a2a 360deg); }
+
+.persona-emoji { font-size: 8rem; margin: 20px 0; animation: bounce 2s infinite; }
+.persona-title { font-size: 2.5rem; color: gold; text-transform: uppercase; letter-spacing: 2px; }
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin: 30px 0;
+}
+
+.summary-item {
+  background: rgba(255,255,255,0.1);
+  padding: 15px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.share-btn {
+  background: #fff;
+  color: #000;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 30px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-top: 20px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.restart-btn {
+  background: transparent;
+  color: #aaa;
+  border: 1px solid #aaa;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+.wrapped-loading, .wrapped-error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #000;
+  color: #fff;
+  font-size: 1.5rem;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}

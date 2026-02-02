@@ -2,13 +2,19 @@ import { useState, useEffect } from 'react'
 import { OuraDashboard, ConnectOuraButton, useOuraAuth } from 'oura-stats-visualizer'
 import './App.css'
 
+// ... imports
+import { OuraYearWrapped } from './OuraYearWrapped'
+
 function App() {
   const [manualToken, setManualToken] = useState('')
   const [clientId, setClientId] = useState('')
   const [useSandbox, setUseSandbox] = useState(true)
   const [isDarkMode, setIsDarkMode] = useState(false)
+  const [showWrapped, setShowWrapped] = useState(false) // New State
   const authResult = useOuraAuth()
 
+  // ... (rest of logic)
+  
   // Prioritize OAuth token, fall back to manual entry or localStorage, or use dummy for sandbox
   const activeToken = useSandbox 
     ? 'sandbox-dummy-token' 
@@ -36,6 +42,10 @@ function App() {
     window.location.reload()
   }
 
+  if (showWrapped && activeToken) {
+    return <OuraYearWrapped accessToken={activeToken} useSandbox={useSandbox} baseUrl={useSandbox ? proxyBaseUrl : undefined} onClose={() => setShowWrapped(false)} />
+  }
+
   return (
     <div style={{ 
       padding: 20, 
@@ -54,19 +64,38 @@ function App() {
         }}>
           {isDarkMode ? 'Agent Data Overview' : 'Oura Stats Visualizer Demo'}
         </h1>
-        <button 
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          style={{
-            backgroundColor: isDarkMode ? '#000' : '#f0f0f0',
-            color: isDarkMode ? '#ffffff' : '#333',
-            border: isDarkMode ? '1px solid #ffffff' : '1px solid #ccc',
-            padding: '8px 16px',
-            fontFamily: isDarkMode ? '"Courier New", Courier, monospace' : 'inherit',
-            textTransform: isDarkMode ? 'uppercase' : 'none'
-          }}
-        >
-          {isDarkMode ? '[ Disable Dark Mode ]' : 'Enable Dark Mode'}
-        </button>
+        <div style={{ display: 'flex', gap: 10 }}>
+          {activeToken && (
+             <button 
+                onClick={() => setShowWrapped(true)}
+                style={{
+                  background: 'linear-gradient(45deg, #ff00cc, #3333ff)',
+                  color: '#fff',
+                  border: 'none',
+                  padding: '8px 16px',
+                  borderRadius: '20px',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 15px rgba(50, 50, 255, 0.4)'
+                }}
+             >
+               ✨ 2025 Wrapped
+             </button>
+          )}
+          <button 
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            style={{
+              backgroundColor: isDarkMode ? '#000' : '#f0f0f0',
+              color: isDarkMode ? '#ffffff' : '#333',
+              border: isDarkMode ? '1px solid #ffffff' : '1px solid #ccc',
+              padding: '8px 16px',
+              fontFamily: isDarkMode ? '"Courier New", Courier, monospace' : 'inherit',
+              textTransform: isDarkMode ? 'uppercase' : 'none'
+            }}
+          >
+            {isDarkMode ? '[ Disable Dark Mode ]' : 'Enable Dark Mode'}
+          </button>
+        </div>
       </div>
       
       <div style={{ marginBottom: 20 }}>
