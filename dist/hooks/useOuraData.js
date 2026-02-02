@@ -43,7 +43,7 @@ export var useOuraData = function (_a) {
     var _e = useState(null), error = _e[0], setError = _e[1];
     useEffect(function () {
         var fetchData = function () { return __awaiter(void 0, void 0, void 0, function () {
-            var headers, params, finalBaseUrl, _a, activityRes, readinessRes, sleepRes, err_1;
+            var headers, params, heartRateParams, finalBaseUrl, _a, activityRes, readinessRes, sleepRes, stressRes, spo2Res, resilienceRes, cardioAgeRes, heartRateRes, sleepDocRes, sleepTimeRes, sessionRes, workoutRes, tagRes, enhancedTagRes, restModeRes, ringConfigRes, vo2MaxRes, err_1;
             var _b;
             return __generator(this, function (_c) {
                 switch (_c.label) {
@@ -57,20 +57,55 @@ export var useOuraData = function (_a) {
                         _c.trys.push([1, 3, 4, 5]);
                         headers = { Authorization: "Bearer ".concat(accessToken) };
                         params = { start_date: startDate, end_date: endDate };
+                        heartRateParams = {
+                            start_datetime: "".concat(startDate, "T00:00:00"),
+                            end_datetime: "".concat(endDate, "T23:59:59")
+                        };
                         finalBaseUrl = baseUrl || (useSandbox
                             ? 'https://api.ouraring.com/v2/sandbox/usercollection'
                             : 'https://api.ouraring.com/v2/usercollection');
                         return [4 /*yield*/, Promise.all([
                                 axios.get("".concat(finalBaseUrl, "/daily_activity"), { headers: headers, params: params }),
                                 axios.get("".concat(finalBaseUrl, "/daily_readiness"), { headers: headers, params: params }),
-                                axios.get("".concat(finalBaseUrl, "/daily_sleep"), { headers: headers, params: params })
+                                axios.get("".concat(finalBaseUrl, "/daily_sleep"), { headers: headers, params: params }),
+                                axios.get("".concat(finalBaseUrl, "/daily_stress"), { headers: headers, params: params }),
+                                axios.get("".concat(finalBaseUrl, "/daily_spo2"), { headers: headers, params: params }),
+                                axios.get("".concat(finalBaseUrl, "/daily_resilience"), { headers: headers, params: params }),
+                                axios.get("".concat(finalBaseUrl, "/daily_cardiovascular_age"), { headers: headers, params: params }),
+                                axios.get("".concat(finalBaseUrl, "/heartrate"), { headers: headers, params: heartRateParams }),
+                                axios.get("".concat(finalBaseUrl, "/sleep"), { headers: headers, params: params }),
+                                axios.get("".concat(finalBaseUrl, "/sleep_time"), { headers: headers, params: params }),
+                                axios.get("".concat(finalBaseUrl, "/session"), { headers: headers, params: params }),
+                                axios.get("".concat(finalBaseUrl, "/workout"), { headers: headers, params: params }),
+                                axios.get("".concat(finalBaseUrl, "/tag"), { headers: headers, params: params }),
+                                axios.get("".concat(finalBaseUrl, "/enhanced_tag"), { headers: headers, params: params }),
+                                axios.get("".concat(finalBaseUrl, "/rest_mode_period"), { headers: headers, params: params }),
+                                // ring_configuration is not available in sandbox
+                                !useSandbox
+                                    ? axios.get("".concat(finalBaseUrl, "/ring_configuration"), { headers: headers, params: params })
+                                    : Promise.resolve({ data: { data: [] } }),
+                                axios.get("".concat(finalBaseUrl, "/vO2_max"), { headers: headers, params: params })
                             ])];
                     case 2:
-                        _a = _c.sent(), activityRes = _a[0], readinessRes = _a[1], sleepRes = _a[2];
+                        _a = _c.sent(), activityRes = _a[0], readinessRes = _a[1], sleepRes = _a[2], stressRes = _a[3], spo2Res = _a[4], resilienceRes = _a[5], cardioAgeRes = _a[6], heartRateRes = _a[7], sleepDocRes = _a[8], sleepTimeRes = _a[9], sessionRes = _a[10], workoutRes = _a[11], tagRes = _a[12], enhancedTagRes = _a[13], restModeRes = _a[14], ringConfigRes = _a[15], vo2MaxRes = _a[16];
                         setData({
                             activity: activityRes.data.data,
                             readiness: readinessRes.data.data,
-                            sleep: sleepRes.data.data
+                            sleep: sleepRes.data.data,
+                            daily_stress: stressRes.data.data,
+                            daily_spo2: spo2Res.data.data,
+                            daily_resilience: resilienceRes.data.data,
+                            daily_cardiovascular_age: cardioAgeRes.data.data,
+                            heart_rate: heartRateRes.data.data,
+                            sleep_documents: sleepDocRes.data.data,
+                            sleep_time: sleepTimeRes.data.data,
+                            session: sessionRes.data.data,
+                            workout: workoutRes.data.data,
+                            tag: tagRes.data.data,
+                            enhanced_tag: enhancedTagRes.data.data,
+                            rest_mode_period: restModeRes.data.data,
+                            ring_configuration: ringConfigRes.data.data,
+                            vo2_max: vo2MaxRes.data.data
                         });
                         return [3 /*break*/, 5];
                     case 3:

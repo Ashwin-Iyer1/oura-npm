@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { useOuraData } from '../hooks/useOuraData';
-import { ActivityChart, ReadinessChart, SleepChart } from './Charts';
+import { 
+  ActivityChart, ReadinessChart, SleepChart, StressChart, SpO2Chart, 
+  HeartRateChart, WorkoutChart, ResilienceChart, CardioAgeChart,
+  VO2MaxChart, SleepDetailChart, RingConfigCard, SleepTimeCard, 
+  RestModeCard, SimpleListCard
+} from './Charts';
 
 interface OuraDashboardProps {
   accessToken: string;
@@ -138,6 +143,7 @@ export const OuraDashboard: React.FC<OuraDashboardProps> = ({
       </div>
 
       <div style={gridContainerStyle}>
+        {/* Core Daily Stats */}
         <div style={cardStyle(4)}>
           <ActivityChart data={data.activity} darkMode={darkMode} />
         </div>
@@ -148,9 +154,117 @@ export const OuraDashboard: React.FC<OuraDashboardProps> = ({
           <SleepChart data={data.sleep} darkMode={darkMode} />
         </div>
         
-        {/* Placeholder for future detailed stats or heatmaps to fill the dense grid */}
-        <div style={{ ...cardStyle(12), minHeight: '150px', justifyContent: 'center', alignItems: 'center', color: '#333' }}>
-          <span style={{ textTransform: 'uppercase', letterSpacing: '2px', fontSize: '10px' }}>NO_ADDITIONAL_DATA_STREAM</span>
+        {/* Secondary Daily Stats */}
+        {data.daily_stress && data.daily_stress.length > 0 && (
+          <div style={cardStyle(4)}>
+            <StressChart data={data.daily_stress} darkMode={darkMode} />
+          </div>
+        )}
+        
+        {data.daily_spo2 && data.daily_spo2.length > 0 && (
+          <div style={cardStyle(4)}>
+            <SpO2Chart data={data.daily_spo2} darkMode={darkMode} />
+          </div>
+        )}
+        
+        {data.heart_rate && data.heart_rate.length > 0 && (
+          <div style={cardStyle(4)}>
+            <HeartRateChart data={data.heart_rate} darkMode={darkMode} />
+          </div>
+        )}
+        
+        {/* Workouts & Resilience */}
+        {data.workout && data.workout.length > 0 && (
+          <div style={cardStyle(4)}>
+            <WorkoutChart data={data.workout} darkMode={darkMode} />
+          </div>
+        )}
+
+        {data.daily_resilience && data.daily_resilience.length > 0 && (
+          <div style={cardStyle(4)}>
+            <ResilienceChart data={data.daily_resilience} darkMode={darkMode} />
+          </div>
+        )}
+        
+        {/* Advanced Metrics */}
+        {data.daily_cardiovascular_age && data.daily_cardiovascular_age.length > 0 && (
+          <div style={cardStyle(4)}>
+            <CardioAgeChart data={data.daily_cardiovascular_age} darkMode={darkMode} />
+          </div>
+        )}
+        
+        {data.vo2_max && data.vo2_max.length > 0 && (
+           <div style={cardStyle(4)}>
+             <VO2MaxChart data={data.vo2_max} darkMode={darkMode} />
+           </div>
+        )}
+
+        {data.sleep_documents && data.sleep_documents.length > 0 && (
+           <div style={cardStyle(4)}>
+             <SleepDetailChart data={data.sleep_documents} darkMode={darkMode} />
+           </div>
+        )}
+        
+        {/* Cards & Lists */}
+        {(data.sleep_time && data.sleep_time.length > 0) && (
+            <div style={cardStyle(4)}>
+                <SleepTimeCard data={data.sleep_time} darkMode={darkMode} />
+            </div>
+        )}
+
+        {(data.ring_configuration && data.ring_configuration.length > 0) && (
+             <div style={cardStyle(4)}>
+                 <RingConfigCard data={data.ring_configuration} darkMode={darkMode} />
+             </div>
+        )}
+
+        {/* Combined Events List for Tags, Sessions, Rest Mode */}
+        <div style={cardStyle(4)}>
+            <RestModeCard data={data.rest_mode_period || []} darkMode={darkMode} />
+        </div>
+
+        <div style={cardStyle(4)}>
+            <SimpleListCard 
+                title="SESSIONS" 
+                darkMode={darkMode} 
+                data={data.session || []} 
+                renderItem={(s) => (
+                    <div>
+                        <span style={{opacity:0.7, marginRight:6}}>{s.day}</span>
+                        <strong>{s.type}</strong> ({s.mood})
+                    </div>
+                )}
+            />
+        </div>
+
+        <div style={cardStyle(4)}>
+             <SimpleListCard 
+                title="TAGS" 
+                darkMode={darkMode} 
+                data={data.tag || []} 
+                renderItem={(t) => (
+                    <div>
+                         <span style={{opacity:0.7, marginRight:6}}>{t.day}</span>
+                         {t.text && <span>{t.text} </span>}
+                         {t.tags?.length > 0 && <span style={{color: '#888'}}>[{t.tags.join(', ')}]</span>}
+                    </div>
+                )}
+            />
+        </div>
+
+         <div style={cardStyle(4)}>
+             <SimpleListCard 
+                title="ENHANCED TAGS" 
+                darkMode={darkMode} 
+                data={data.enhanced_tag || []} 
+                renderItem={(t) => (
+                    <div>
+                         <span style={{opacity:0.7, marginRight:6}}>{t.start_day}</span>
+                         <strong>{t.tag_type_code}</strong>
+                         {t.comment && <div>"{t.comment}"</div>}
+                    </div>
+                )}
+            />
         </div>
       </div>
     </div>
