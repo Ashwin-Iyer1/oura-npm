@@ -43,7 +43,13 @@ function App() {
   }
 
   if (showWrapped && activeToken) {
-    return <OuraYearWrapped accessToken={activeToken} useSandbox={useSandbox} baseUrl={useSandbox ? proxyBaseUrl : undefined} onClose={() => setShowWrapped(false)} />
+    return <OuraYearWrapped 
+      accessToken={activeToken} 
+      useSandbox={useSandbox} 
+      baseUrl={useSandbox ? proxyBaseUrl : undefined} 
+      fallbackBaseUrl={proxyBaseUrl}
+      onClose={() => setShowWrapped(false)} 
+    />
   }
 
   return (

@@ -8,6 +8,7 @@ interface WrappedProps {
   onClose: () => void;
   useSandbox?: boolean;
   baseUrl?: string;
+  fallbackBaseUrl?: string;
 }
 
 interface Stats {
@@ -26,14 +27,27 @@ const YEAR = 2025;
 const START_DATE = `${YEAR}-01-01`;
 const END_DATE = `${YEAR}-12-31`;
 
-export const OuraYearWrapped: React.FC<WrappedProps> = ({ accessToken, onClose, useSandbox, baseUrl }) => {
+export const OuraYearWrapped: React.FC<WrappedProps> = ({ accessToken, onClose, useSandbox, baseUrl, fallbackBaseUrl }) => {
+  const [fallbackToSandbox, setFallbackToSandbox] = useState(false);
+
+  const effectiveSandbox = useSandbox || fallbackToSandbox;
+  const effectiveBaseUrl = (fallbackToSandbox && fallbackBaseUrl) ? fallbackBaseUrl : baseUrl;
+
   const { data, loading, error } = useOuraData({ 
     accessToken, 
     startDate: START_DATE, 
     endDate: END_DATE, 
-    useSandbox,
-    baseUrl 
+    useSandbox: effectiveSandbox,
+    baseUrl: effectiveBaseUrl 
   });
+
+  // Effect to handle fallback on error
+  React.useEffect(() => {
+    if (error && error.includes('400') && !useSandbox && !fallbackToSandbox) {
+      console.warn("Wrapped: 400 Error detected, falling back to Sandbox mode.");
+      setFallbackToSandbox(true);
+    }
+  }, [error, useSandbox, fallbackToSandbox]);
 
   const [slideIndex, setSlideIndex] = useState(0);
 

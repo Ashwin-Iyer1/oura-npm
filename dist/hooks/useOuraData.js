@@ -72,7 +72,12 @@ export var useOuraData = function (_a) {
                                 axios.get("".concat(finalBaseUrl, "/daily_spo2"), { headers: headers, params: params }),
                                 axios.get("".concat(finalBaseUrl, "/daily_resilience"), { headers: headers, params: params }),
                                 axios.get("".concat(finalBaseUrl, "/daily_cardiovascular_age"), { headers: headers, params: params }),
-                                axios.get("".concat(finalBaseUrl, "/heartrate"), { headers: headers, params: heartRateParams }),
+                                // Heart rate can fail if range > 30 days (400 Bad Request). Handle gracefully.
+                                axios.get("".concat(finalBaseUrl, "/heartrate"), { headers: headers, params: heartRateParams })
+                                    .catch(function (err) {
+                                    console.warn('Heart rate fetch failed (likely due to date range limit), skipping:', err.message);
+                                    return { data: { data: [] } };
+                                }),
                                 axios.get("".concat(finalBaseUrl, "/sleep"), { headers: headers, params: params }),
                                 axios.get("".concat(finalBaseUrl, "/sleep_time"), { headers: headers, params: params }),
                                 axios.get("".concat(finalBaseUrl, "/session"), { headers: headers, params: params }),

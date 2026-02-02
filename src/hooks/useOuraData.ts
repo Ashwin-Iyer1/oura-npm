@@ -49,7 +49,13 @@ export const useOuraData = ({ accessToken, startDate, endDate, useSandbox = true
           axios.get<{ data: DailyResilience[] }>(`${finalBaseUrl}/daily_resilience`, { headers, params }),
           axios.get<{ data: DailyCardiovascularAge[] }>(`${finalBaseUrl}/daily_cardiovascular_age`, { headers, params }),
           
-          axios.get<{ data: HeartRate[] }>(`${finalBaseUrl}/heartrate`, { headers, params: heartRateParams }),
+          // Heart rate can fail if range > 30 days (400 Bad Request). Handle gracefully.
+          axios.get<{ data: HeartRate[] }>(`${finalBaseUrl}/heartrate`, { headers, params: heartRateParams })
+              .catch(err => {
+                  console.warn('Heart rate fetch failed (likely due to date range limit), skipping:', err.message);
+                  return { data: { data: [] as HeartRate[] } };
+              }),
+
           axios.get<{ data: Sleep[] }>(`${finalBaseUrl}/sleep`, { headers, params }),
           axios.get<{ data: SleepTime[] }>(`${finalBaseUrl}/sleep_time`, { headers, params }),
           
