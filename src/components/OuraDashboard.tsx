@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useOuraData } from '../hooks/useOuraData';
+import { emptyOuraData } from '../data/client';
+import type { OuraCollection, OuraRequestOptions } from '../data/client';
 import { 
   ActivityChart, ReadinessChart, SleepChart, StressChart, SpO2Chart, 
   HeartRateChart, WorkoutChart, ResilienceChart, CardioAgeChart,
@@ -14,6 +16,8 @@ interface OuraDashboardProps {
   useSandbox?: boolean;
   baseUrl?: string;
   darkMode?: boolean;
+  collections?: readonly OuraCollection[];
+  fetchImpl?: OuraRequestOptions['fetchImpl'];
 }
 
 export const OuraDashboard: React.FC<OuraDashboardProps> = ({ 
@@ -22,16 +26,17 @@ export const OuraDashboard: React.FC<OuraDashboardProps> = ({
   endDate: initialEndDate = new Date().toISOString().split('T')[0],
   useSandbox = true,
   baseUrl,
-  darkMode = false
+  darkMode = false,
+  collections,
+  fetchImpl
 }) => {
   const [startDate, setStartDate] = useState(initialStartDate);
   const [endDate, setEndDate] = useState(initialEndDate);
   
-  const { data, loading, error } = useOuraData({ accessToken, startDate, endDate, useSandbox, baseUrl });
-
-  if (loading) return <div>Loading Oura Data...</div>;
-  if (error) return <div style={{ color: 'red' }}>Error: {error}</div>;
-  if (!data) return <div>No data available</div>;
+  const { data: fetchedData, loading, error, errors, refresh } = useOuraData({ accessToken, startDate, endDate, useSandbox, baseUrl, collections, fetchImpl });
+  const data = fetchedData || emptyOuraData();
+  useEffect(() => setStartDate(initialStartDate), [initialStartDate]);
+  useEffect(() => setEndDate(initialEndDate), [initialEndDate]);
 
   const containerStyle = darkMode ? {
     backgroundColor: '#000000',
@@ -53,6 +58,7 @@ export const OuraDashboard: React.FC<OuraDashboardProps> = ({
 
   const controlBarStyle = darkMode ? {
     display: 'flex',
+    flexWrap: 'wrap' as const,
     gap: '16px',
     alignItems: 'center',
     border: borderStyle,
@@ -60,6 +66,7 @@ export const OuraDashboard: React.FC<OuraDashboardProps> = ({
     backgroundColor: '#050505'
   } : {
     display: 'flex', 
+    flexWrap: 'wrap' as const,
     gap: '16px', 
     alignItems: 'center', 
     border: borderStyle,
@@ -70,16 +77,16 @@ export const OuraDashboard: React.FC<OuraDashboardProps> = ({
 
   const gridContainerStyle = {
     display: 'grid',
-    gridTemplateColumns: 'repeat(12, 1fr)',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 290px), 1fr))',
     gap: '4px',
     flex: 1
   };
 
-  const cardStyle = (span: number = 4) => (darkMode ? {
+  const cardStyle = (_span: number = 4) => (darkMode ? {
     backgroundColor: '#050505',
     border: borderStyle,
     padding: '2px', // Minimal padding
-    gridColumn: `span ${span}`,
+    minWidth: 0,
     height: '250px', // Fixed height to prevent infinite growth with ParentSize
     display: 'flex',
     flexDirection: 'column' as const,
@@ -89,7 +96,7 @@ export const OuraDashboard: React.FC<OuraDashboardProps> = ({
     padding: '15px', 
     borderRadius: '8px', 
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    gridColumn: `span ${span}`,
+    minWidth: 0,
     height: '300px',
     display: 'flex',
     flexDirection: 'column' as const,
@@ -140,7 +147,7 @@ export const OuraDashboard: React.FC<OuraDashboardProps> = ({
       <div style={controlBarStyle}>
         <h2 style={headerTextStyle}>OURA_STATS_VISUALIZER</h2>
         <div style={{ flex: 1 }} />
-        <div style={{ display: 'flex', gap: '16px' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
           <label style={{ textTransform: 'uppercase', letterSpacing: '1px', fontSize: '10px', color: '#888' }}>
             START_DATE
             <input 
@@ -162,16 +169,25 @@ export const OuraDashboard: React.FC<OuraDashboardProps> = ({
         </div>
       </div>
 
-      <div style={gridContainerStyle}>
+      {loading && <p role="status">Loading Oura data...</p>}
+      {error && <p role="alert">{error}</p>}
+      {!accessToken && <p role="status">Connect an authorized Oura account to load data.</p>}
+      {Object.keys(errors).length > 0 && <div role="status" style={{ padding: 12, border: borderStyle }}>
+        <strong>Some collections are unavailable. Successful collections remain visible.</strong>
+        <ul>{Object.entries(errors).map(([collection, message]) => <li key={collection}>{collection.replace(/_/g, ' ')}: {message}</li>)}</ul>
+        <button type="button" onClick={refresh}>Retry collections</button>
+      </div>}
+
+      {!loading && !error && accessToken && <div style={gridContainerStyle}>
         {/* Core Daily Stats */}
         <div style={cardStyle(4)}>
-          <ActivityChart data={data.activity} darkMode={darkMode} />
+          {data.activity.length ? <ActivityChart data={data.activity} darkMode={darkMode} /> : <p>{errors.activity ? 'Activity unavailable. Retry collections to try again.' : 'No activity observations in this range.'}</p>}
         </div>
         <div style={cardStyle(4)}>
-          <ReadinessChart data={data.readiness} darkMode={darkMode} />
+          {data.readiness.length ? <ReadinessChart data={data.readiness} darkMode={darkMode} /> : <p>{errors.readiness ? 'Readiness unavailable. Other collections remain visible.' : 'No readiness observations in this range.'}</p>}
         </div>
         <div style={cardStyle(4)}>
-          <SleepChart data={data.sleep} darkMode={darkMode} />
+          {data.sleep.length ? <SleepChart data={data.sleep} darkMode={darkMode} /> : <p>{errors.sleep ? 'Sleep unavailable. Retry collections to try again.' : 'No sleep observations in this range.'}</p>}
         </div>
         
         {/* Secondary Daily Stats */}
@@ -286,7 +302,7 @@ export const OuraDashboard: React.FC<OuraDashboardProps> = ({
                 )}
             />
         </div>
-      </div>
+      </div>}
     </div>
   );
 };

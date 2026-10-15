@@ -4,20 +4,13 @@ import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: './',
   plugins: [react()],
+  build: { outDir: '../../demo/dist', emptyOutDir: true },
   resolve: {
     alias: {
       react: path.resolve(__dirname, './node_modules/react'),
       'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
-    },
-  },
-  server: {
-    proxy: {
-      '/oura-api': {
-        target: 'https://api.ouraring.com',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/oura-api/, ''),
-      },
     },
   },
 })

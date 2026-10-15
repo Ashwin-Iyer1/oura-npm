@@ -1,0 +1,2 @@
+# Keep Vite's HTML output deterministic on Windows and Unix.
+*.html text eol=lf

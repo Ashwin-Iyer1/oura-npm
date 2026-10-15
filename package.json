@@ -8,7 +8,9 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --import tsx --test test/*.test.mjs",
+    "test:ui": "playwright test",
+    "build:demo": "npm run build && npm --prefix examples/demo-app run build"
   },
   "peerDependencies": {
     "react": "^18.0.0",
@@ -27,12 +29,14 @@
     "@visx/text": "^3.12.0",
     "@visx/tooltip": "^3.12.0",
     "@visx/xychart": "^3.12.0",
-    "axios": "^1.6.0",
     "date-fns": "^3.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.0",
     "@types/node": "^20.0.0",
     "@types/react": "^18.0.0",
+    "react-test-renderer": "^18.3.1",
+    "tsx": "^4.23.15",
     "typescript": "^5.0.0"
   },
   "keywords": [
