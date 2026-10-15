@@ -1,5 +1,7 @@
 # Oura Stats Visualizer
 
+[Explore the interactive gallery](https://ashwiniyer.com/demos/oura/index.html) · [Read the case study](https://ashwiniyer.com/projects/oura-visualizer)
+
 A React + TypeScript library for Oura API v2 collections, reusable charts, and dashboards. The interactive gallery demonstrates the real data hook with original synthetic fixtures: no account, token, or personal health data is used.
 
 ## Explore the gallery
