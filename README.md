@@ -88,4 +88,6 @@ npm run test:ui
 
 Unit tests cover partial failures, pagination, invalid responses/dates, timeout and abort, auth clearing, stale response races, retry, missing observations, and SVG gaps. Browser tests cover actual gallery workflows, simulated outage recovery, CSV, keyboard inspection, no external data traffic, and both themes at 320/390/768/1440px.
 
+GitHub Actions runs these existing suites and the library/gallery production build on Node 22 for pushes and pull requests to `main`. CI installs both committed lockfiles and uses only mocked transports and synthetic gallery data. It does not use Oura credentials, publish to npm, or deploy the gallery.
+
 React 18, a modern browser with Fetch/AbortController, and Node 18+ for standalone client execution are required. This project is independent of Oura and distributed under the ISC license.
